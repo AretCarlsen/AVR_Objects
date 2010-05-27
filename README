@@ -1,3 +1,5 @@
 AVR GPIO and SPI wrappers for C++.
 
-Designed to disintegrate into inline code upon compilation, in order to approach assembly-level pin/bus efficiency.
+Designed to disintegrate into inline code upon compilation,
+in order to approach assembly-level pin/bus efficiency.
+
