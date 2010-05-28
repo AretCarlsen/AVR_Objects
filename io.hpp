@@ -4,13 +4,13 @@
 #include <avr/pgmspace.h>
 
 #define OutputPin_F_internals(PRT, PIN) \
-  inline void set_output_high(void){ PORT##PRT |= _BV(PIN); } \
-  inline void set_output_low(void){ PORT##PRT &= ~_BV(PIN); } \
-  inline void set_output(bool new_value){ if(new_value) set_output_high(); else set_output_low(); } \
-  inline bool get_output(void){ return (PORT##PRT & _BV(PIN)); } \
-  inline bool output_is_high(void){ return get_output(); } \
-  inline bool output_is_low(void){ return (!get_output()); } \
-  inline void toggle_output(void){ set_output(! get_output()); }
+  static inline void set_output_high(void){ PORT##PRT |= _BV(PIN); } \
+  static inline void set_output_low(void){ PORT##PRT &= ~_BV(PIN); } \
+  static inline void set_output(const bool new_value){ if(new_value) set_output_high(); else set_output_low(); } \
+  static inline bool get_output(void){ return (PORT##PRT & _BV(PIN)); } \
+  static inline bool output_is_high(void){ return get_output(); } \
+  static inline bool output_is_low(void){ return (!get_output()); } \
+  static inline void toggle_output(void){ set_output(! get_output()); }
 #define OutputPin_F_named(CLASSNAME, PRT, PIN) class CLASSNAME { public: \
   CLASSNAME(){ DDR##PRT |= _BV(PIN); } \
   OutputPin_F_internals(PRT, PIN) \
@@ -18,12 +18,12 @@
 #define OutputPin_F(PRT, PIN) OutputPin_F_named(OutPin_##PRT##_##PIN, PRT, PIN)
 
 #define InputPin_F_internals(PRT, PIN) \
-  inline bool get_input(void){ return (P##IN##PRT & _BV(PIN)); } \
-  inline bool input_is_high(void){ return get_input(); } \
-  inline bool input_is_low(void){ return (! get_input()); } \
-  inline void enable_pullup(void){ PORT##PRT |= _BV(PIN); } \
-  inline void disable_pullup(void){ PORT##PRT &= ~_BV(PIN); } \
-  inline void set_pullup(bool new_value) { if(new_value) enable_pullup(); else disable_pullup(); }
+  static inline bool get_input(void){ return (P##IN##PRT & _BV(PIN)); } \
+  static inline bool input_is_high(void){ return get_input(); } \
+  static inline bool input_is_low(void){ return (! get_input()); } \
+  static inline void enable_pullup(void){ PORT##PRT |= _BV(PIN); } \
+  static inline void disable_pullup(void){ PORT##PRT &= ~_BV(PIN); } \
+  static inline void set_pullup(const bool new_value){ if(new_value) enable_pullup(); else disable_pullup(); }
 #define InputPin_F_named(CLASSNAME, PRT, PIN) class CLASSNAME { public: \
   CLASSNAME(){ DDR##PRT &= ~_BV(PIN); } \
   InputPin_F_internals(PRT, PIN) \
@@ -34,12 +34,12 @@
   CLASSNAME(){ set_direction_input(); } \
   OutputPin_F_internals(PRT, PIN) \
   InputPin_F_internals(PRT, PIN) \
-  inline void set_direction_output(void){ DDR##PRT |= _BV(PIN); } \
-  inline void set_direction_input(void){ DDR##PRT &= ~_BV(PIN); } \
-  inline void set_direction_output(bool new_value){ if(new_value) set_direction_output(); else set_direction_input(); } \
-  inline bool get_direction(void){ return (DDR##PRT & _BV(PIN)); } \
-  inline bool is_output(void){ return get_direction(); } \
-  inline bool is_input(void){ return (! get_direction()); } \
+  static inline void set_direction_output(void){ DDR##PRT |= _BV(PIN); } \
+  static inline void set_direction_input(void){ DDR##PRT &= ~_BV(PIN); } \
+  static inline void set_direction_output(const bool new_value){ if(new_value) set_direction_output(); else set_direction_input(); } \
+  static inline bool get_direction(void){ return (DDR##PRT & _BV(PIN)); } \
+  static inline bool is_output(void){ return get_direction(); } \
+  static inline bool is_input(void){ return (! get_direction()); } \
 }
 #define BidirPin_F(PRT, PIN) BidirPin_F_named(BidirPin_##PRT##_##PIN, PRT, PIN)
 
