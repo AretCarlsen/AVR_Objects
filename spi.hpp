@@ -68,7 +68,7 @@ static inline void init(const ClockRate_t initial_clockRate = DefaultClockrate){
   //cbi(SPCR, CPHA);
 
 // Set clockrate
-  set_SPI_clockRate(initial_clockRate);
+  set_clockRate(initial_clockRate);
 
   // Enable SPI bus.
   sbi(SPCR, SPE);
