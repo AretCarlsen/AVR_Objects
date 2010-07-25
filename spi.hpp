@@ -5,7 +5,7 @@
 #define MISO_PIN             PB4
 #define MOSI_PIN             PB3
 #define SCK_PIN              PB5
-//#define SS_PIN               PB2
+#define SS_PIN               PB2
 
 #define DUMMY_BYTE 0
 
@@ -45,11 +45,14 @@ static inline void set_clockRate(const ClockRate_t new_clockRate){
   else cbi(SPCR, SPR0);
 }
 
-static inline void init(const ClockRate_t initial_clockRate = DefaultClockrate){
+static inline void init(const ClockRate_t initial_clockRate = DefaultClockrate, bool enable_SS = true){
 // Set pin directions.
   sbi(SPI_DIRECTION_BUS, SCK_PIN);
   sbi(SPI_DIRECTION_BUS, MOSI_PIN);
+// MISO is not always utilized, but set to input anyway.
   cbi(SPI_DIRECTION_BUS, MISO_PIN);
+// SS is usually set as output. If not, many AVR SPI buses will behave differently.
+  sbi(SPI_DIRECTION_BUS, SS_PIN);
 
   SPCR = 0;
   SPSR = 0;
@@ -76,7 +79,9 @@ static inline void init(const ClockRate_t initial_clockRate = DefaultClockrate){
 
 // Wait for an SPI transmission to complete.
 static inline void wait_for_SPI_complete(){
+  DEBUGprint("wfSc1;");
   while((SPSR & (1<<SPIF))==0);
+  DEBUGprint("wfSc2;");
 }
 
 // Send and receive one byte.
