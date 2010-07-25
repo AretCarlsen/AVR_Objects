@@ -79,9 +79,7 @@ static inline void init(const ClockRate_t initial_clockRate = DefaultClockrate, 
 
 // Wait for an SPI transmission to complete.
 static inline void wait_for_SPI_complete(){
-  DEBUGprint("wfSc1;");
   while((SPSR & (1<<SPIF))==0);
-  DEBUGprint("wfSc2;");
 }
 
 // Send and receive one byte.
